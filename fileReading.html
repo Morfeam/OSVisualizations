@@ -1,0 +1,96 @@
+<script>
+// Array being used to hold multiple arrays
+var procHandler = [];
+
+
+// Array being used to hold each line of the file
+var procLoad = [];
+
+
+// string used to convert string to integers
+var numberString = '';
+
+
+// integer used to hold the value of the converted string
+var nextNum;
+
+
+// from here to the line starting with "var allText"
+// code can be the same for everyone since the function
+// is just checking for the status of the files
+function readInputTextFile(file){
+ var rawFile = new XMLHttpRequest();
+    rawFile.open("GET", file, false);
+    rawFile.onreadystatechange = function (){
+    if(rawFile.readyState === 4){
+         if(rawFile.status === 200 || rawFile.status == 0){
+
+
+              // The entire file is being stored into the variable as a string
+              var allText = rawFile.responseText;
+
+
+              // Im splitting the string by newline characters
+              // each newline being looped through by ".forEach()"
+              allText.split('\n').forEach(function(line) {
+
+
+                   // each line get saved to the earlier created string variable
+                   numberString = line;
+
+
+                   // the new line string now gets split by , in a .forEach() loop
+                   numberString.split(',').forEach(function(number) {
+
+
+                           // each number that is seperated by a , now gets converted to an integer
+                           nextNum = Number(number);
+
+
+                           // push each number into an array
+
+                           procLoad.push(nextNum);
+
+
+                           // once array hits 4 numbers [processID, Arrival, Burst, Priority]
+                           // push process into handler array that holds each different process
+                           // then reinitialize procLoad to fill it with 4 next numbers of the next process
+                           if(procLoad.length == 4) {
+                                  procHandler.push(procLoad);
+                                  procLoad = [];
+                                    }
+                                });
+                            });
+                        }
+                    }
+                }
+
+
+  // this can also be the same for everyone if you want
+  // just reading, sending nothing to the file
+        rawFile.send(null);
+       }
+
+
+// calls the function to read input.txt
+
+readInputTextFile("input.txt");
+
+
+/*
+ before you begin splitting the text, I would start by knowing how your arrays would look beforehand by hard coding them
+ into your code and traversing them via your animations
+
+
+knowing that i was going to use a 2d array, made it easier for me to visualize how i needed to split my data
+
+    procHandler = [ [1,0,24,3] , [2,0,3,2] , [3,0,3,1] ]
+
+
+ the splitting will look different for everyone since some file formats don't have any newline characters in them, and some
+ include different characters such as - and :
+
+
+ if you need help with anything, again, you can let me know here or by any other means of communication I have given to the 
+ group and I will get back to you ASAP. */
+</script>
